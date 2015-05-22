@@ -8,12 +8,15 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-flex-layout/classes/iron-flex-layout.html">
 <link rel="import" href="../paper-input/paper-input-behavior.html">
 <link rel="import" href="../paper-input/paper-input-container.html">
 <link rel="import" href="../paper-input/paper-input-error.html">
 <link rel="import" href="../iron-input/iron-input.html">
 <link rel="import" href="../iron-form-element-behavior/iron-form-element-behavior.html">
-<link rel="import" href="cc-validator.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
+
+<script src="cc-validator.js"></script>
 
 <!--
 `gold-cc-input` is a Material Design field for entering a credit card number.
@@ -27,39 +30,45 @@ Example:
 -->
 
 <dom-module id="gold-cc-input">
-  <style>
+  <style is="custom-style">
   :host {
     display: block;
-    white-space: nowrap;
+  }
+
+  /* Use a container so that when hiding the icon, the layout doesn't jump around. */
+  .icon-container {
+    margin-left: 10px;
+    height: 27px;
+  }
+
+  iron-icon {
+    --iron-icon-width: 40px;
+    --iron-icon-height: 24px;
   }
   </style>
 
   <template>
 
-    <paper-input-container id="container"
-        required$="[[required]]"
-        auto-validate="[[autoValidate]]"
-        attr-for-value="bind-value">
+    <paper-input-container id="container">
 
       <template is="dom-if" if="[[label]]">
         <label>[[label]]</label>
       </template>
 
-      <cc-validator></cc-validator>
-
-      <input is="iron-input" id="input"
-          validator="cc-validator"
-          bind-value="{{value}}"
-          type="tel"
-          maxlength="30"
-          allowed-pattern="[0-9]"
-          prevent-invalid-input
-          name$="[[name]]">
-
-      <iron-icon id="icon" hidden></iron-icon>
+      <div class="horizontal layout">
+        <input is="iron-input" id="input"
+            bind-value="{{value}}"
+            type="tel"
+            maxlength="30"
+            required$="[[required]]"
+            allowed-pattern="[0-9]"
+            prevent-invalid-input
+            name$="[[name]]">
+        <div class="icon-container"><iron-icon id="icon"></iron-icon></div>
+      </div>
 
       <template is="dom-if" if="[[errorMessage]]">
-        <paper-input-error id="error">[[errorMessage]]</paper-input-error>
+        <paper-input-error>[[errorMessage]]</paper-input-error>
       </template>
 
     </paper-input-container>
@@ -86,7 +95,15 @@ Example:
       label: {
         type: String,
         value: "Card number"
-      }
+      },
+
+      /**
+       * The type of the credit card, if it is valid. Empty otherwise.
+       */
+      cardType: {
+        type: String,
+        notify: true
+      },
     },
 
     observers: [
@@ -112,8 +129,42 @@ Example:
       // space, we need to advance the selection to maintain the caret position.
       if (!previousCharASpace && this.value.charAt(start - 1) == ' ')
         this.$.input.selectionStart++;
-    }
 
+      if (this.autoValidate)
+        this.validate();
+    },
+
+    validate: function() {
+      // Empty, non-required input is valid.
+      if (!this.required && this.value == '') {
+        return true;
+      }
+
+      var result = CreditCardValidator.validate(this.value);
+      var valid = result.valid && result.length_valid;
+      this.cardType = valid ? result.card_type.name : '';
+
+      // Update the container and its addons (i.e. the custom error-message).
+      this.$.container.invalid = !valid;
+      this.$.container.updateAddons({
+        inputElement: this.$.input,
+        value: this.value,
+        invalid: !valid
+      });
+
+      // We don't have icons for all the card types.
+      if (valid && result.card_type.icon) {
+        this.$.icon.src ='../' + result.card_type.icon;
+        this.$.icon.alt = this.cardType;
+        this.$.icon.hidden = false;
+      } else {
+        this.$.icon.src = null;
+        this.$.icon.alt = '';
+        this.$.icon.hidden = true;
+      }
+
+      return valid;
+    }
   })
 
 })();

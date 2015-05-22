@@ -29,22 +29,22 @@ IN THE SOFTWARE.
     card_types = [
       {
         name: 'amex',
-        icon: 'assets/amex.png',
+        icon: 'images/amex.png',
         pattern: /^3[47]/,
         valid_length: [15]
       }, {
         name: 'diners_club',
-        icon: 'assets/diners_club.png',
+        icon: 'images/diners_club.png',
         pattern: /^30[0-5]/,
         valid_length: [14]
       }, {
         name: 'diners_club',
-        icon: 'assets/diners_club.png',
+        icon: 'images/diners_club.png',
         pattern: /^36/,
         valid_length: [14]
       }, {
         name: 'jcb',
-        icon: 'assets/jcb.png',
+        icon: 'images/jcb.png',
         pattern: /^35(2[89]|[3-8][0-9])/,
         valid_length: [16]
       }, {
@@ -57,12 +57,12 @@ IN THE SOFTWARE.
         valid_length: [16]
       }, {
         name: 'visa',
-        icon: 'assets/visa.png',
+        icon: 'images/visa.png',
         pattern: /^4/,
         valid_length: [16]
       }, {
         name: 'mastercard',
-        icon: 'assets/mastercard.png',
+        icon: 'images/mastercard.png',
         pattern: /^5[1-5]/,
         valid_length: [16]
       }, {
@@ -71,7 +71,7 @@ IN THE SOFTWARE.
         valid_length: [12, 13, 14, 15, 16, 17, 18, 19]
       }, {
         name: 'discover',
-        icon: 'assets/discover.png',
+        icon: 'images/discover.png',
         pattern: /^(6011|622(12[6-9]|1[3-9][0-9]|[2-8][0-9]{2}|9[0-1][0-9]|92[0-5]|64[4-9])|65)/,
         valid_length: [16]
       }
