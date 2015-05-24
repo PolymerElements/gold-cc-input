@@ -4,4 +4,6 @@
 
 Example:
 
-    <gold-cc-input></gold-cc-input>
+```html
+<gold-cc-input></gold-cc-input>
+```
