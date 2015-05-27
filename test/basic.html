@@ -36,6 +36,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </template>
   </test-fixture>
 
+  <test-fixture id="ErrorWithoutAutoValidate">
+    <template>
+      <gold-cc-input required error-message="error"></gold-cc-input>
+    </template>
+  </test-fixture>
+
   <test-fixture id="required">
     <template>
       <gold-cc-input auto-validate required error-message="error"></gold-cc-input>
@@ -59,6 +65,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         var container = Polymer.dom(input.root).querySelector('paper-input-container');
         assert.ok(container, 'paper-input-container exists');
         assert.isTrue(container.invalid);
+        assert.equal(input.cardType, '');
       });
 
       test('valid input is ok', function() {
@@ -69,6 +76,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         var container = Polymer.dom(input.root).querySelector('paper-input-container');
         assert.ok(container, 'paper-input-container exists');
         assert.isFalse(container.invalid);
+        assert.equal(input.cardType, 'visa');
       });
 
       test('empty required input shows error', function() {
@@ -80,16 +88,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         assert.notEqual(getComputedStyle(error).display, 'none', 'error is not display:none');
       });
 
-      test('caret position is preserved', function() {
-        var input = fixture('required');
-        var ironInput = input.querySelector('input[is="iron-input"]');
-        input.value='1111 1111';
-        ironInput.selectionStart = (2,2);
-        input.value='1122 1111 11';
+      test('invalid input shows error message after manual validation', function() {
+        var input = fixture('ErrorWithoutAutoValidate');
+        forceXIfStamp(input);
+        var error = Polymer.dom(input.root).querySelector('paper-input-error');
+        assert.ok(error, 'paper-input-error exists');
 
-        assert.equal(ironInput.selectionStart, 2, 'selectionStart is preserved');
-        assert.equal(ironInput.selectionEnd, 2, 'selectionEnd is preserved');
+        // The error message is only displayed after manual validation.
+        assert.equal(getComputedStyle(error).display, 'none', 'error is not display:none');
+        input.validate();
+        assert.notEqual(getComputedStyle(error).display, 'none', 'error is not display:none');
       });
+
+      // TODO: re-enable when PolymerElements/iron-input/issues/24 is fixed.
+      // test('caret position is preserved', function() {
+      //   var input = fixture('required');
+      //   var ironInput = input.querySelector('input[is="iron-input"]');
+      //   input.value='1111 1111';
+      //   ironInput.selectionStart = (2,2);
+      //   input.value='1122 1111 11';
+      //
+      //   assert.equal(ironInput.selectionStart, 2, 'selectionStart is preserved');
+      //   assert.equal(ironInput.selectionEnd, 2, 'selectionEnd is preserved');
+      // });
 
     });
 
