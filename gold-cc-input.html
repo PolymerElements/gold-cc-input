@@ -19,11 +19,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <script src="cc-validator.js"></script>
 
 <!--
-`gold-cc-input` is a Material Design field for entering a credit card number.
-
-Example:
+`gold-cc-input` is a single-line text field with Material Design styling
+for entering a credit card number. As the user types, the number will be
+formatted by adding a space every 4 digits.
 
     <gold-cc-input></gold-cc-input>
+
+It may include an optional label, which by default is "Card number".
+
+    <gold-cc-input label="CC"></gold-cc-input>
+
+### Validation
+
+The input can detect whether a credit card number is valid, and the type
+of credit card it is, using the Luhn checksum. See `http://jquerycreditcardvalidator.com/`
+for more information.
+
+The input can be automatically validated as the user is typing by using
+the `auto-validate` and `required` attributes. For manual validation, the
+element also has a `validate()` method, which returns the validity of the
+input as well sets any appropriate error messages and styles.
+
+See `Polymer.PaperInputBehavior` for more API docs.
+
+### Styling
+
+See `Polymer.PaperInputContainer` for a list of custom properties used to
+style this element.
 
 @group Gold Elements
 @class gold-cc-input
@@ -63,6 +85,7 @@ Example:
             required$="[[required]]"
             allowed-pattern="[0-9]"
             prevent-invalid-input
+            autocomplete$="[[autocomplete]]"
             name$="[[name]]">
         <div class="icon-container"><iron-icon id="icon"></iron-icon></div>
       </div>
