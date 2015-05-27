@@ -73,12 +73,12 @@ style this element.
 
     <paper-input-container id="container">
 
-      <template is="dom-if" if="[[label]]">
-        <label>[[label]]</label>
-      </template>
+      <label hidden$="[[!label]]">[[label]]</label>
 
       <div class="horizontal layout">
         <input is="iron-input" id="input"
+            aria-labelledby$="[[_ariaLabelledBy]]"
+            aria-describedby$="[[_ariaDescribedBy]]"
             bind-value="{{value}}"
             type="tel"
             maxlength="30"
