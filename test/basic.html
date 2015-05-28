@@ -114,6 +114,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     });
 
+    suite('a11y', function() {
+
+      test('has aria-labelledby', function() {
+        var input = fixture('basic');
+        assert.isTrue(input.inputElement.hasAttribute('aria-labelledby'))
+        assert.equal(input.inputElement.getAttribute('aria-labelledby'), Polymer.dom(input.root).querySelector('label').id, 'aria-labelledby points to the label');
+      });
+
+      test('required and error has aria-labelledby', function() {
+        var input = fixture('required');
+        assert.isTrue(input.inputElement.hasAttribute('aria-labelledby'))
+        assert.equal(input.inputElement.getAttribute('aria-labelledby'), Polymer.dom(input.root).querySelector('label').id, 'aria-labelledby points to the label');
+      });
+
+    });
+
   </script>
 
 </body>
