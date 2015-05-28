@@ -18,36 +18,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <title>gold-cc-input demo</title>
 
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-
   <link rel="import" href="../gold-cc-input.html">
 
-  <link rel="stylesheet" href="../../paper-styles/demo.css">
+  <link rel="stylesheet" href="../../paper-styles/paper-styles.html">
+  <link rel="import" href="../../paper-styles/demo-pages.html">
 
 </head>
-<style>
-  gold-cc-input {
-    width: 300px;
-  }
-</style>
 <body>
-  <section>
-    <h4>Auto-validation</h4>
-    <gold-cc-input auto-validate></gold-cc-input>
-  </section>
+  <div class="vertical-section-container centered">
+    <h4>Standard</h4>
+    <div class="vertical-section">
+      <gold-cc-input></gold-cc-input>
+      <gold-cc-input auto-validate label="Auto-validating"></gold-cc-input>
+    </div>
 
-  <section>
-    <h4>Pre-validated cards</h4>
-    <gold-cc-input label="Visa" value="4000 0000 0000 0002" auto-validate></gold-cc-input>
-    <br>
-    <gold-cc-input label= "MasterCard" value="5100 0000 0000 0008" auto-validate></gold-cc-input>
-    <br>
-    <gold-cc-input label="Discover" value="6011 0000 0000 0004" auto-validate></gold-cc-input>
-    <br>
-    <gold-cc-input label="Invalid Discover Card" value="6011 0000 0000 1233" auto-validate></gold-cc-input>
-  </section>
+    <h4>Pre-validated</h4>
+    <div class="vertical-section">
+      <gold-cc-input label="Visa" value="4000 0000 0000 0002" auto-validate></gold-cc-input>
+      <gold-cc-input label= "MasterCard" value="5100 0000 0000 0008" auto-validate></gold-cc-input>
+      <gold-cc-input label="Discover" value="6011 0000 0000 0004" auto-validate></gold-cc-input>
+      <gold-cc-input label="Invalid Discover Card" value="6011 0000 0000 1233" auto-validate></gold-cc-input>
+    </div>
 
-  <section>
-    <h4>Custom message</h4>
-    <gold-cc-input auto-validate label="Cats only" error-message="needs more cats" required></gold-cc-input>
-  </section>
+    <h4>Custom error message</h4>
+    <div class="vertical-section">
+      <gold-cc-input auto-validate label="Cats only" error-message="needs more cats" required></gold-cc-input>
+    <div>
+  </div>
 </body>
