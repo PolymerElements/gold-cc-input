@@ -179,7 +179,7 @@ style this element.
 
       // We don't have icons for all the card types.
       if (valid && result.card_type.icon) {
-        this.$.icon.src ='../' + result.card_type.icon;
+        this.$.icon.src = this.resolveUrl(result.card_type.icon);
         this.$.icon.alt = this.cardType;
         this.$.icon.hidden = false;
       } else {
