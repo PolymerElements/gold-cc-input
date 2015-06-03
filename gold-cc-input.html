@@ -85,7 +85,7 @@ style this element.
             type="tel"
             maxlength="30"
             required$="[[required]]"
-            allowed-pattern="[0-9]"
+            allowed-pattern="[0-9 ]"
             prevent-invalid-input
             autocomplete="cc-number"
             name$="[[name]]">
@@ -150,13 +150,20 @@ style this element.
       }
       this.value = formattedValue.trim();
 
-      // If the character right before the selection is a newly inserted
-      // space, we need to advance the selection to maintain the caret position.
-      if (!previousCharASpace && this.value.charAt(start - 1) == ' ')
-        this.$.input.selectionStart++;
-
       if (this.autoValidate)
         this.validate();
+
+      // The cursor automatically jumps to the end after re-setting the value,
+      // so restore it to its original position.
+      this.$.input.selectionStart = start;
+      this.$.input.selectionEnd = start;
+
+      // If the character right before the selection is a newly inserted
+      // space, we need to advance the selection to maintain the caret position.
+      if (!previousCharASpace && this.value.charAt(start - 1) == ' ') {
+        this.$.input.selectionStart = start+1;
+        this.$.input.selectionEnd = start+1;
+      }
     },
 
     validate: function() {
