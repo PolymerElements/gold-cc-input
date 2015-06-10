@@ -159,15 +159,10 @@ style this element.
         }
         formattedValue += value[i];
       }
-      this.value = formattedValue.trim();
+      this.updateValueAndPreserveCaret(formattedValue.trim());
 
       if (this.autoValidate)
         this.validate();
-
-      // The cursor automatically jumps to the end after re-setting the value,
-      // so restore it to its original position.
-      this.$.input.selectionStart = start;
-      this.$.input.selectionEnd = start;
 
       // If the character right before the selection is a newly inserted
       // space, we need to advance the selection to maintain the caret position.
