@@ -8,14 +8,11 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 <link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../iron-flex-layout/classes/iron-flex-layout.html">
-<link rel="import" href="../paper-input/paper-input-behavior.html">
-<link rel="import" href="../paper-input/paper-input-container.html">
-<link rel="import" href="../paper-input/paper-input-error.html">
-<link rel="import" href="../iron-input/iron-input.html">
-<link rel="import" href="../iron-form-element-behavior/iron-form-element-behavior.html">
+<link rel="import" href="../paper-input/paper-input.html">
 <link rel="import" href="../iron-icon/iron-icon.html">
-
+<link rel="import" href="../iron-form-element-behavior/iron-form-element-behavior.html">
+<link rel="import" href="../paper-input/paper-input.html">
+<link rel="import" href="../paper-input/paper-input-behavior.html">
 <script src="cc-validator.js"></script>
 
 <!--
@@ -70,46 +67,6 @@ style this element.
     --iron-icon-height: 24px;
   }
   </style>
-
-  <template>
-
-    <paper-input-container id="container"
-        disabled$="[[disabled]]"
-        no-label-float="[[noLabelFloat]]"
-        always-float-label="[[_computeAlwaysFloatLabel(alwaysFloatLabel,placeholder)]]"
-        invalid="[[invalid]]">
-
-      <label hidden$="[[!label]]">[[label]]</label>
-
-      <div class="horizontal layout">
-        <input is="iron-input" id="input"
-            aria-labelledby$="[[_ariaLabelledBy]]"
-            aria-describedby$="[[_ariaDescribedBy]]"
-            bind-value="{{value}}"
-            type="tel"
-            maxlength="30"
-            required$="[[required]]"
-            allowed-pattern="[0-9 ]"
-            prevent-invalid-input
-            autocomplete="cc-number"
-            name$="[[name]]"
-            disabled$="[[disabled]]"
-            invalid="{{invalid}}"
-            autofocus$="[[autofocus]]"
-            inputmode$="[[inputmode]]"
-            placeholder$="[[placeholder]]"
-            readonly$="[[readonly]]"
-            size$="[[size]]">
-        <div class="icon-container"><iron-icon id="icon"></iron-icon></div>
-      </div>
-
-      <template is="dom-if" if="[[errorMessage]]">
-        <paper-input-error>[[errorMessage]]</paper-input-error>
-      </template>
-
-    </paper-input-container>
-  </template>
-
 </dom-module>
 
 <script>
@@ -119,20 +76,12 @@ style this element.
     is: 'gold-cc-input',
 
     behaviors: [
+      Polymer.IronFormElementBehavior,
       Polymer.PaperInputBehavior,
-      Polymer.IronValidatableBehavior,
-      Polymer.IronFormElementBehavior
+      Polymer.IronControlState
     ],
 
     properties: {
-      /**
-       * The label for this input.
-       */
-      label: {
-        type: String,
-        value: "Card number"
-      },
-
       /**
        * The type of the credit card, if it is valid. Empty otherwise.
        */
@@ -140,14 +89,62 @@ style this element.
         type: String,
         notify: true
       },
+
+      /**
+       * Paper-input overrides. See PaperInputBehavior docs.
+       */
+      label: {
+        value: 'Card number'
+      },
+
+      type: {
+        value: 'tel'
+      },
+
+      maxlength: {
+        value: 30
+      },
+
+      allowedPattern: {
+        value: '[0-9 ]'
+      },
+
+      preventInvalidInput: {
+        value: true
+      },
+
+      autocomplete: {
+        value: 'cc-number'
+      }
     },
 
     observers: [
       '_computeValue(value)'
     ],
 
+    _prepTemplate: function() {
+      // Use a paper-input template.
+      var template =
+          Polymer.DomModule.import('paper-input-content', 'template').cloneNode(true);
+
+      // Add the credit card icon as a suffix to the input in the paper-input-container.
+      var icon = document.createElement('iron-icon');
+      icon.id = 'icon';
+      icon.setAttribute('suffix', 'true');
+      template.content.getElementById('container').appendChild(icon);
+
+      this._template = template;
+    },
+
+    ready: function() {
+      // The container will bind to the `auto-validate` property after the
+      // template is stamped. We handle auto-validation manually, so remove
+      // the attribute.
+      this.$.container.removeAttribute('auto-validate');
+    },
+
     _computeValue: function(value) {
-      var start = this.$.input.selectionStart;
+      var start = this.inputElement.selectionStart;
       var previousCharASpace = this.value.charAt(start - 1) == ' ';
 
       value = value.replace(/\s+/g, '');
@@ -167,8 +164,8 @@ style this element.
       // If the character right before the selection is a newly inserted
       // space, we need to advance the selection to maintain the caret position.
       if (!previousCharASpace && this.value.charAt(start - 1) == ' ') {
-        this.$.input.selectionStart = start+1;
-        this.$.input.selectionEnd = start+1;
+        this.inputElement.selectionStart = start+1;
+        this.inputElement.selectionEnd = start+1;
       }
     },
 
@@ -183,12 +180,7 @@ style this element.
       this.cardType = valid ? result.card_type.name : '';
 
       // Update the container and its addons (i.e. the custom error-message).
-      this.$.container.invalid = !valid;
-      this.$.container.updateAddons({
-        inputElement: this.$.input,
-        value: this.value,
-        invalid: !valid
-      });
+      this.invalid = !valid;
 
       // We don't have icons for all the card types.
       if (valid && result.card_type.icon) {
