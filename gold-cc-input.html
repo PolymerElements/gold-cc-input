@@ -172,6 +172,12 @@ style this element.
       }
     },
 
+    /**
+     * Returns true if the element has a valid value, and sets the visual
+     * error state.
+     * 
+     * @return {boolean} Whether the input is currently valid or not.
+     */
     validate: function() {
       // Empty, non-required input is valid.
       if (!this.required && this.value == '') {
