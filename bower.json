@@ -10,9 +10,7 @@
     "polymer",
     "input"
   ],
-  "main": [
-    "gold-cc-input.html"
-  ],
+  "main": "gold-cc-input.html",
   "private": true,
   "repository": {
     "type": "git",
