@@ -40,6 +40,10 @@ the `auto-validate` and `required` attributes. For manual validation, the
 element also has a `validate()` method, which returns the validity of the
 input as well sets any appropriate error messages and styles.
 
+A list of allowable credit card types can be provided via the `cardTypes`
+property. Possible options, from `cc-validator.js`, are: `amex`, `diners_club`,
+`discover`, `jcb`, `laser`, `maestro`, `mastercard`, `visa`, `visa_electron`.
+
 See `Polymer.PaperInputBehavior` for more API docs.
 
 ### Styling
@@ -144,6 +148,14 @@ style this element.
             notify: true
           },
 
+          /**
+           * A list of allowable card-types. If empty, all card-types are valid
+           */
+          cardTypes: {
+            type: Array,
+            observer: '_onCardTypesChanged'
+          },
+
           value: {
             observer: '_onValueChanged'
           }
@@ -155,6 +167,14 @@ style this element.
 
         ready: function() {
           // If there's an initial input, validate it.
+          if (this.value)
+            this._handleAutoValidate();
+        },
+
+        /**
+         * A handler that is called when cardTypes changes
+         */
+        _onCardTypesChanged: function(cardTypes, oldValue) {
           if (this.value)
             this._handleAutoValidate();
         },
@@ -205,6 +225,9 @@ style this element.
 
           var result = CreditCardValidator.validate(this.value);
           var valid = result.valid && result.length_valid;
+          if (valid && this.cardTypes && this.cardTypes.length > 0) {
+            valid = this.cardTypes.indexOf(result.card_type.name) !== -1;
+          }
           this.cardType = valid ? result.card_type.name : '';
 
           // Update the container and its addons (i.e. the custom error-message).
