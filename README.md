@@ -12,9 +12,9 @@ thing! https://github.com/PolymerLabs/tedium/issues
 
 -->
 
-[![Build Status](https://travis-ci.org/PolymerElements/gold-cc-input.svg?branch=master)](https://travis-ci.org/PolymerElements/gold-cc-input)
+[![Build status](https://travis-ci.org/PolymerElements/gold-cc-input.svg?branch=master)](https://travis-ci.org/PolymerElements/gold-cc-input)
 
-_[Demo and API Docs](https://elements.polymer-project.org/elements/gold-cc-input)_
+_[Demo and API docs](https://elements.polymer-project.org/elements/gold-cc-input)_
 
 
 ##&lt;gold-cc-input&gt;
