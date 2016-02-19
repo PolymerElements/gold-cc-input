@@ -82,6 +82,34 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         assert.equal(input.cardType, 'visa');
       });
 
+      test('invalid card-type is not ok', function() {
+        var input = fixture('required');
+        input.value='4000000000000002';
+        input.cardTypes = [ 'mastercard' ];
+        forceXIfStamp(input);
+
+        var container = Polymer.dom(input.root).querySelector('paper-input-container');
+        assert.ok(container, 'paper-input-container exists');
+        assert.isTrue(container.invalid);
+        assert.equal(input.cardType, '');
+
+        var error = Polymer.dom(input.root).querySelector('paper-input-error');
+        assert.ok(error, 'paper-input-error exists');
+        assert.notEqual(getComputedStyle(error).visibility, 'hidden', 'error is not visibility:hidden');
+      });
+
+      test('valid card-type is ok', function() {
+        var input = fixture('required');
+        input.value='4000000000000002';
+        input.cardTypes = [ 'visa' ];
+        forceXIfStamp(input);
+
+        var container = Polymer.dom(input.root).querySelector('paper-input-container');
+        assert.ok(container, 'paper-input-container exists');
+        assert.isFalse(container.invalid);
+        assert.equal(input.cardType, 'visa');
+      });
+
       test('empty required input shows error on blur', function() {
         var input = fixture('required');
         forceXIfStamp(input);

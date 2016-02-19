@@ -44,6 +44,10 @@ the `auto-validate` and `required` attributes. For manual validation, the
 element also has a `validate()` method, which returns the validity of the
 input as well sets any appropriate error messages and styles.
 
+A list of allowable credit card types can be provided via the `cardTypes`
+property. Possible options, from `cc-validator.js`, are: `amex`, `diners_club`,
+`discover`, `jcb`, `laser`, `maestro`, `mastercard`, `visa`, `visa_electron`.
+
 See `Polymer.PaperInputBehavior` for more API docs.
 
 ### Styling
