@@ -20,7 +20,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 IN THE SOFTWARE.
  */
 
- (function(global) {
+var CreditCardValidator = (function(global) {
   'use strict';
 
   function validateCreditCard (input) {
@@ -186,7 +186,7 @@ IN THE SOFTWARE.
     return validate(input);
   };
 
-  global.CreditCardValidator = {
+  return {
     validate: validateCreditCard
   };
  })(this);
