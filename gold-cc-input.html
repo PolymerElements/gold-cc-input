@@ -157,6 +157,7 @@ style this element.
           },
 
           value: {
+            type: String,
             observer: '_onValueChanged'
           }
         },
@@ -190,7 +191,7 @@ style this element.
           var start = this.$.input.selectionStart;
           var previousCharASpace = value ? this.value.charAt(start - 1) == ' ' : false;
 
-          var value = value.replace(/\s+/g, '');
+          value = value.replace(/\s+/g, '');
           var formattedValue = '';
           for (var i = 0; i < value.length; i++) {
             // Add a space after every 4 characters.
