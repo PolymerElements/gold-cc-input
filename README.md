@@ -55,4 +55,8 @@ See `Polymer.PaperInputBehavior` for more API docs.
 See `Polymer.PaperInputContainer` for a list of custom properties used to
 style this element.
 
+| Custom property | Description | Default  |
+| --- | --- | --- |
+| `----gold-cc-input-icon-container` | Mixin applied to the icon container | `{}` |
+
 
