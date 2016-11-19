@@ -183,7 +183,7 @@ var CreditCardValidator = (function(global) {
     })(this);
 
     normalize = function(number) {
-      return number.replace(/[ -]/g, '');
+      return number !== null ? number.replace(/[ -]/g, '') : '';
     };
 
     validate = (function(_this) {
