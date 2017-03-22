@@ -236,8 +236,10 @@ Custom property | Description | Default
           }
           this.cardType = valid ? result.card_type.name : '';
 
+          // Update invalid property
+          this.invalid = !valid;
+
           // Update the container and its addons (i.e. the custom error-message).
-          this.$.container.invalid = !valid;
           this.$.container.updateAddons({
             inputElement: this.$.input,
             value: this.value,

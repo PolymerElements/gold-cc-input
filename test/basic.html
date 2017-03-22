@@ -153,6 +153,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         assert.equal(ironInput.selectionEnd, 2, 'selectionEnd is preserved');
       });
 
+      test('validate method should update invalid property', function() {
+        var input = fixture('required');
+        input.value = '1111 1111';
+        input.validate();
+        assert.isTrue(input.invalid);
+      });
+
     });
 
     suite('a11y', function() {
