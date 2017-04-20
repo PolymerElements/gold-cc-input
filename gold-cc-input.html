@@ -130,8 +130,6 @@ Custom property | Description | Default
 
       <label slot="label" hidden$="[[!label]]">[[label]]</label>
 
-      <span slot="prefix" prefix class="country-code">+[[countryCode]]</span>
-
       <span id="template-placeholder"></span>
       <div class="icon-container" slot="suffix">
         <iron-icon id="icon"></iron-icon>
@@ -170,9 +168,8 @@ Custom property | Description | Default
   <template id="v1">
     <iron-input id="input" slot="input"
         allowed-pattern="[0-9 ]"
-        bind-value$="{{value}}"
-        disabled$="[[disabled]]"
-        invalid$="{{invalid}}"
+        bind-value="{{value}}"
+        invalid="{{invalid}}"
         maxlength="30">
       <input id="nativeInput"
           aria-labelledby$="[[_ariaLabelledBy]]"
@@ -182,7 +179,6 @@ Custom property | Description | Default
           type="tel"
           prevent-invalid-input
           autocomplete="cc-number"
-          bind-value$="{{value}}"
           name$="[[name]]"
           disabled$="[[disabled]]"
           autofocus$="[[autofocus]]"
@@ -233,7 +229,6 @@ Custom property | Description | Default
           value: {
             type: String,
             observer: '_onValueChanged',
-            value: '',
           },
         },
 
@@ -242,20 +237,14 @@ Custom property | Description | Default
         ],
 
         ready: function() {
-          // If there's an initial input, validate it.
-          if (this.value)
-            this._handleAutoValidate();
+          if (!this.value)
+            this.value = '';
         },
 
-        // TODO: remove this when 2.0 adds beforeRegister back to legacy
-        registered: function() {
-          if (Polymer.Element) {
-            this._beforeRegister();
-          }
-        },
         beforeRegister: function() {
           this._beforeRegister();
         },
+
         _beforeRegister: function() {
           var template = Polymer.DomModule.import('gold-cc-input', 'template');
           var version = Polymer.Element ? 'v1' : 'v0';
@@ -279,7 +268,7 @@ Custom property | Description | Default
         _onIronInputReady: function() {
           // Only validate when attached if the input already has a value.
           if (!!this.inputElement.bindValue) {
-            this.$.container._handleValueAndAutoValidate(this.inputElement);
+            this._handleAutoValidate();
           }
         },
 
@@ -295,7 +284,6 @@ Custom property | Description | Default
          * A handler that is called on input
          */
         _onValueChanged: function(value, oldValue) {
-          // The initial property assignment is handled by `ready`.
           if (oldValue == undefined)
             return;
 
@@ -369,10 +357,15 @@ Custom property | Description | Default
          * Overidden from Polymer.IronControlState.
          */
         _onFocusedChanged: function(focused) {
+          console.log(focused)
+
+          if (!this._focusableElement) {
+            return;
+          }
           if (!focused) {
             this._handleAutoValidate();
           }
-        }
+        },
       })
 
     })();
