@@ -13,11 +13,9 @@ thing! https://github.com/PolymerLabs/tedium/issues
 -->
 
 [![Build status](https://travis-ci.org/PolymerElements/gold-cc-input.svg?branch=master)](https://travis-ci.org/PolymerElements/gold-cc-input)
+[![Demo and API Docs](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/PolymerElements/gold-cc-input)
 
-_[Demo and API docs](https://elements.polymer-project.org/elements/gold-cc-input)_
-
-
-##&lt;gold-cc-input&gt;
+## &lt;gold-cc-input&gt;
 
 `gold-cc-input` is a single-line text field with Material Design styling
 for entering a credit card number. As the user types, the number will be

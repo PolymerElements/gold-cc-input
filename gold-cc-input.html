@@ -51,8 +51,8 @@ See `Polymer.PaperInputBehavior` for more API docs.
 See `Polymer.PaperInputContainer` for a list of custom properties used to
 style this element.
 
-Custom property | Description | Default 
-----------------|-------------|---------- 
+Custom property | Description | Default
+----------------|-------------|----------
 `----gold-cc-input-icon-container` | Mixin applied to the icon container | `{}`
 
 @group Gold Elements
@@ -74,7 +74,7 @@ Custom property | Description | Default
     .icon-container {
       margin-left: 10px;
       height: 24px;
-      @apply(--gold-cc-input-icon-container);
+      @apply --gold-cc-input-icon-container;
     }
 
     iron-icon {
@@ -83,7 +83,42 @@ Custom property | Description | Default
     }
 
     .container {
-      @apply(--layout-horizontal);
+      @apply --layout-horizontal;
+    }
+
+    input {
+      @apply --layout-flex;
+    }
+
+    input {
+      position: relative; /* to make a stacking context */
+      outline: none;
+      box-shadow: none;
+      padding: 0;
+      width: 100%;
+      max-width: 100%;
+      background: transparent;
+      border: none;
+      color: var(--paper-input-container-input-color, var(--primary-text-color));
+      -webkit-appearance: none;
+      text-align: inherit;
+      vertical-align: bottom;
+      /* Firefox sets a min-width on the input, which can cause layout issues */
+      min-width: 0;
+      @apply --paper-font-subhead;
+      @apply --paper-input-container-input;
+    }
+    input::-webkit-input-placeholder {
+      color: var(--paper-input-container-color, var(--secondary-text-color));
+    }
+    input:-moz-placeholder {
+      color: var(--paper-input-container-color, var(--secondary-text-color));
+    }
+    input::-moz-placeholder {
+      color: var(--paper-input-container-color, var(--secondary-text-color));
+    }
+    input:-ms-input-placeholder {
+      color: var(--paper-input-container-color, var(--secondary-text-color));
     }
     </style>
 
@@ -93,35 +128,68 @@ Custom property | Description | Default
         always-float-label="[[_computeAlwaysFloatLabel(alwaysFloatLabel,placeholder)]]"
         invalid="[[invalid]]">
 
-      <label hidden$="[[!label]]">[[label]]</label>
+      <label slot="label" hidden$="[[!label]]">[[label]]</label>
 
-      <div class="container">
-        <input is="iron-input" id="input"
-            aria-labelledby$="[[_ariaLabelledBy]]"
-            aria-describedby$="[[_ariaDescribedBy]]"
-            bind-value="{{value}}"
-            type="tel"
-            maxlength="30"
-            required$="[[required]]"
-            allowed-pattern="[0-9 ]"
-            prevent-invalid-input
-            autocomplete="cc-number"
-            name$="[[name]]"
-            disabled$="[[disabled]]"
-            invalid="{{invalid}}"
-            autofocus$="[[autofocus]]"
-            inputmode$="[[inputmode]]"
-            placeholder$="[[placeholder]]"
-            readonly$="[[readonly]]"
-            size$="[[size]]">
-        <div class="icon-container"><iron-icon id="icon"></iron-icon></div>
-      </div>
+      <span id="template-placeholder"></span>
 
       <template is="dom-if" if="[[errorMessage]]">
-        <paper-input-error>[[errorMessage]]</paper-input-error>
+        <paper-input-error slot="add-on" id="error">
+          [[errorMessage]]
+        </paper-input-error>
       </template>
 
     </paper-input-container>
+  </template>
+
+  <template id="v0">
+    <div class="container">
+      <input is="iron-input" id="input" slot="input"
+          aria-labelledby$="[[_ariaLabelledBy]]"
+          aria-describedby$="[[_ariaDescribedBy]]"
+          bind-value="{{value}}"
+          type="tel"
+          maxlength="30"
+          required$="[[required]]"
+          allowed-pattern="[0-9 ]"
+          prevent-invalid-input
+          autocomplete="cc-number"
+          name$="[[name]]"
+          disabled$="[[disabled]]"
+          invalid="{{invalid}}"
+          autofocus$="[[autofocus]]"
+          inputmode$="[[inputmode]]"
+          placeholder$="[[placeholder]]"
+          readonly$="[[readonly]]"
+          size$="[[size]]">
+      <div class="icon-container"><iron-icon id="icon"></iron-icon></div>
+    </div>
+  </template>
+
+  <template id="v1">
+    <iron-input id="input" slot="input"
+        allowed-pattern="[0-9 ]"
+        bind-value="{{value}}"
+        invalid="{{invalid}}"
+        maxlength="30">
+      <input id="nativeInput"
+          aria-labelledby$="[[_ariaLabelledBy]]"
+          aria-describedby$="[[_ariaDescribedBy]]"
+          invalid$="{{invalid}}"
+          required$="[[required]]"
+          type="tel"
+          prevent-invalid-input
+          autocomplete="cc-number"
+          name$="[[name]]"
+          disabled$="[[disabled]]"
+          autofocus$="[[autofocus]]"
+          inputmode$="[[inputmode]]"
+          placeholder$="[[placeholder]]"
+          readonly$="[[readonly]]"
+          size$="[[size]]">
+    </iron-input>
+    <div class="icon-container" slot="suffix">
+      <iron-icon id="icon"></iron-icon>
+    </div>
   </template>
 
   <script>
@@ -164,7 +232,7 @@ Custom property | Description | Default
           value: {
             type: String,
             observer: '_onValueChanged'
-          }
+          },
         },
 
         observers: [
@@ -172,9 +240,49 @@ Custom property | Description | Default
         ],
 
         ready: function() {
-          // If there's an initial input, validate it.
-          if (this.value)
+          if (!this.value && Polymer.Element) {
+            this.value = '';
+          }
+
+          if (this.value && !Polymer.Element) {
+             this._handleAutoValidate();
+          }
+        },
+
+        beforeRegister: function() {
+          this._beforeRegister();
+        },
+
+        _beforeRegister: function() {
+          var template = Polymer.DomModule.import('gold-cc-input', 'template');
+          var version = Polymer.Element ? 'v1' : 'v0';
+          var inputTemplate = Polymer.DomModule.import('gold-cc-input', 'template#' + version);
+          var inputPlaceholder = template.content.querySelector('#template-placeholder');
+          if (inputPlaceholder) {
+            inputPlaceholder.parentNode.replaceChild(inputTemplate.content, inputPlaceholder);
+          }
+        },
+
+        /**
+        * Returns a reference to the focusable element. Overridden from PaperInputBehavior
+        * to correctly focus the native input.
+        */
+        get _focusableElement() {
+          return Polymer.Element ? this.inputElement._inputElement : this.inputElement;
+        },
+
+        // Note: This event is only available in the 2.0 version of this element.
+        // In 1.0, the functionality of `_onIronInputReady` is done in
+        // PaperInputBehavior::attached.
+        listeners: {
+          'iron-input-ready': '_onIronInputReady'
+        },
+
+        _onIronInputReady: function() {
+          // Only validate when attached if the input already has a value.
+          if (!!this.inputElement.bindValue) {
             this._handleAutoValidate();
+          }
         },
 
         /**
@@ -189,7 +297,6 @@ Custom property | Description | Default
          * A handler that is called on input
          */
         _onValueChanged: function(value, oldValue) {
-          // The initial property assignment is handled by `ready`.
           if (oldValue == undefined)
             return;
 
@@ -238,6 +345,7 @@ Custom property | Description | Default
 
           // Update the container and its addons (i.e. the custom error-message).
           this.$.container.invalid = !valid;
+
           this.$.container.updateAddons({
             inputElement: this.$.input,
             value: this.value,
@@ -262,6 +370,9 @@ Custom property | Description | Default
          * Overidden from Polymer.IronControlState.
          */
         _onFocusedChanged: function(focused) {
+          if (!this._focusableElement) {
+            return;
+          }
           if (!focused) {
             this._handleAutoValidate();
           }
