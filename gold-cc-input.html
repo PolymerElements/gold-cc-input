@@ -51,8 +51,8 @@ See `Polymer.PaperInputBehavior` for more API docs.
 See `Polymer.PaperInputContainer` for a list of custom properties used to
 style this element.
 
-Custom property | Description | Default 
-----------------|-------------|---------- 
+Custom property | Description | Default
+----------------|-------------|----------
 `----gold-cc-input-icon-container` | Mixin applied to the icon container | `{}`
 
 @group Gold Elements
@@ -231,7 +231,7 @@ Custom property | Description | Default
 
           value: {
             type: String,
-            observer: '_onValueChanged',
+            observer: '_onValueChanged'
           },
         },
 
@@ -258,8 +258,11 @@ Custom property | Description | Default
           var version = Polymer.Element ? 'v1' : 'v0';
           var inputTemplate = Polymer.DomModule.import('gold-cc-input', 'template#' + version);
           var inputPlaceholder = template.content.querySelector('#template-placeholder');
-          inputPlaceholder.parentNode.replaceChild(inputTemplate.content, inputPlaceholder);
+          if (inputPlaceholder) {
+            inputPlaceholder.parentNode.replaceChild(inputTemplate.content, inputPlaceholder);
+          }
         },
+
         /**
         * Returns a reference to the focusable element. Overridden from PaperInputBehavior
         * to correctly focus the native input.
@@ -267,12 +270,14 @@ Custom property | Description | Default
         get _focusableElement() {
           return Polymer.Element ? this.inputElement._inputElement : this.inputElement;
         },
-        // Note: This event is only available in the 1.0 version of this element.
-        // In 2.0, the functionality of `_onIronInputReady` is done in
+
+        // Note: This event is only available in the 2.0 version of this element.
+        // In 1.0, the functionality of `_onIronInputReady` is done in
         // PaperInputBehavior::attached.
         listeners: {
           'iron-input-ready': '_onIronInputReady'
         },
+
         _onIronInputReady: function() {
           // Only validate when attached if the input already has a value.
           if (!!this.inputElement.bindValue) {
@@ -371,7 +376,7 @@ Custom property | Description | Default
           if (!focused) {
             this._handleAutoValidate();
           }
-        },
+        }
       })
 
     })();
