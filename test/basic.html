@@ -181,6 +181,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           done();
         }, 1);
       });
+
+      test('validate method should update invalid property', function (done) {
+        Polymer.Base.async(function () {
+          var input = fixture('required');
+          input.value = '1111 1111';
+          input.validate();
+          assert.isTrue(input.invalid);
+          done();
+        }, 1);
+      });
     });
 
     suite('a11y', function() {
