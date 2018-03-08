@@ -1,0 +1,10 @@
+{
+  "name": "@polymer/gold-cc-input",
+  "private": true,
+  "description": "A credit card input field",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/PolymerElements/gold-cc-input.git"
+  },
+  "license": "BSD-3-Clause"
+}
