@@ -330,13 +330,13 @@ Custom property | Description | Default
          *
          * @return {boolean} Whether the input is currently valid or not.
          */
-        validate: function() {
+        _getValidity: function(value) {
           // Empty, non-required input is valid.
-          if (!this.required && this.value == '') {
+          if (!this.required && value == '') {
             return true;
           }
 
-          var result = CreditCardValidator.validate(this.value);
+          var result = CreditCardValidator.validate(value);
           var valid = result.valid && result.length_valid;
           if (valid && this.cardTypes && this.cardTypes.length > 0) {
             valid = this.cardTypes.indexOf(result.card_type.name) !== -1;
@@ -348,7 +348,7 @@ Custom property | Description | Default
 
           this.$.container.updateAddons({
             inputElement: this.$.input,
-            value: this.value,
+            value: value,
             invalid: !valid
           });
 
