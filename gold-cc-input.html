@@ -194,193 +194,177 @@ Custom property | Description | Default
 
   <script>
     (function() {
-      Polymer({
+    Polymer({
 
-        is: 'gold-cc-input',
+      is: 'gold-cc-input',
 
-        behaviors: [
-          Polymer.PaperInputBehavior,
-          Polymer.IronValidatableBehavior,
-          Polymer.IronFormElementBehavior
-        ],
+      behaviors: [
+        Polymer.PaperInputBehavior,
+        Polymer.IronValidatableBehavior,
+        Polymer.IronFormElementBehavior
+      ],
 
-        properties: {
-          /**
-           * The label for this input.
-           */
-          label: {
-            type: String,
-            value: "Card number"
-          },
-
-          /**
-           * The type of the credit card, if it is valid. Empty otherwise.
-           */
-          cardType: {
-            type: String,
-            notify: true
-          },
-
-          /**
-           * A list of allowable card-types. If empty, all card-types are valid
-           */
-          cardTypes: {
-            type: Array,
-            observer: '_onCardTypesChanged'
-          },
-
-          value: {
-            type: String,
-            observer: '_onValueChanged'
-          },
-        },
-
-        observers: [
-          '_onFocusedChanged(focused)'
-        ],
-
-        ready: function() {
-          if (!this.value && Polymer.Element) {
-            this.value = '';
-          }
-
-          if (this.value && !Polymer.Element) {
-             this._handleAutoValidate();
-          }
-        },
-
-        beforeRegister: function() {
-          this._beforeRegister();
-        },
-
-        _beforeRegister: function() {
-          var template = Polymer.DomModule.import('gold-cc-input', 'template');
-          var version = Polymer.Element ? 'v1' : 'v0';
-          var inputTemplate = Polymer.DomModule.import('gold-cc-input', 'template#' + version);
-          var inputPlaceholder = template.content.querySelector('#template-placeholder');
-          if (inputPlaceholder) {
-            inputPlaceholder.parentNode.replaceChild(inputTemplate.content, inputPlaceholder);
-          }
-        },
-
+      properties: {
         /**
-        * Returns a reference to the focusable element. Overridden from PaperInputBehavior
-        * to correctly focus the native input.
-        */
-        get _focusableElement() {
-          return Polymer.Element ? this.inputElement._inputElement : this.inputElement;
-        },
-
-        // Note: This event is only available in the 2.0 version of this element.
-        // In 1.0, the functionality of `_onIronInputReady` is done in
-        // PaperInputBehavior::attached.
-        listeners: {
-          'iron-input-ready': '_onIronInputReady'
-        },
-
-        _onIronInputReady: function() {
-          // Only validate when attached if the input already has a value.
-          if (!!this.inputElement.bindValue) {
-            this._handleAutoValidate();
-          }
-        },
-
-        /**
-         * A handler that is called when cardTypes changes
+         * The label for this input.
          */
-        _onCardTypesChanged: function(cardTypes, oldValue) {
-          if (this.value)
-            this._handleAutoValidate();
-        },
+        label: {type: String, value: 'Card number'},
 
         /**
-         * A handler that is called on input
+         * The type of the credit card, if it is valid. Empty otherwise.
          */
-        _onValueChanged: function(value, oldValue) {
-          if (oldValue == undefined)
-            return;
-
-          var start = this.$.input.selectionStart;
-          var previousCharASpace = value ? this.value.charAt(start - 1) == ' ' : false;
-
-          value = value.replace(/\s+/g, '');
-          var formattedValue = '';
-          for (var i = 0; i < value.length; i++) {
-            // Add a space after every 4 characters.
-            if ((i != 0) && (i % 4 == 0)) {
-              formattedValue += ' ';
-            }
-            formattedValue += value[i];
-          }
-          this.updateValueAndPreserveCaret(formattedValue.trim());
-
-          // If the character right before the selection is a newly inserted
-          // space, we need to advance the selection to maintain the caret position.
-          if (!previousCharASpace && this.value.charAt(start - 1) == ' ') {
-            this.$.input.selectionStart = start+1;
-            this.$.input.selectionEnd = start+1;
-          }
-
-          this._handleAutoValidate();
-        },
+        cardType: {type: String, notify: true},
 
         /**
-         * Returns true if the element has a valid value, and sets the visual
-         * error state.
-         *
-         * @return {boolean} Whether the input is currently valid or not.
+         * A list of allowable card-types. If empty, all card-types are valid
          */
-        validate: function() {
-          // Empty, non-required input is valid.
-          if (!this.required && this.value == '') {
-            return true;
-          }
+        cardTypes: {type: Array, observer: '_onCardTypesChanged'},
 
-          var result = CreditCardValidator.validate(this.value);
-          var valid = result.valid && result.length_valid;
-          if (valid && this.cardTypes && this.cardTypes.length > 0) {
-            valid = this.cardTypes.indexOf(result.card_type.name) !== -1;
-          }
-          this.cardType = valid ? result.card_type.name : '';
+        value: {type: String, observer: '_onValueChanged'},
+      },
 
-          // Update the container and its addons (i.e. the custom error-message).
-          this.$.container.invalid = !valid;
+      observers: ['_onFocusedChanged(focused)'],
 
-          this.$.container.updateAddons({
-            inputElement: this.$.input,
-            value: this.value,
-            invalid: !valid
-          });
-
-          // We don't have icons for all the card types.
-          if (valid && result.card_type.icon) {
-            this.$.icon.src = this.resolveUrl(result.card_type.icon);
-            this.$.icon.alt = this.cardType;
-            this.$.icon.hidden = false;
-          } else {
-            this.$.icon.src = null;
-            this.$.icon.alt = '';
-            this.$.icon.hidden = true;
-          }
-
-          return valid;
-        },
-
-        /**
-         * Overidden from Polymer.IronControlState.
-         */
-        _onFocusedChanged: function(focused) {
-          if (!this._focusableElement) {
-            return;
-          }
-          if (!focused) {
-            this._handleAutoValidate();
-          }
+      ready: function() {
+        if (!this.value && Polymer.Element) {
+          this.value = '';
         }
-      })
 
+        if (this.value && !Polymer.Element) {
+          this._handleAutoValidate();
+        }
+      },
+
+      beforeRegister: function() {
+        this._beforeRegister();
+      },
+
+      _beforeRegister: function() {
+        var template = Polymer.DomModule.import('gold-cc-input', 'template');
+        var version = Polymer.Element ? 'v1' : 'v0';
+        var inputTemplate =
+            Polymer.DomModule.import('gold-cc-input', 'template#' + version);
+        var inputPlaceholder =
+            template.content.querySelector('#template-placeholder');
+        if (inputPlaceholder) {
+          inputPlaceholder.parentNode.replaceChild(
+              inputTemplate.content, inputPlaceholder);
+        }
+      },
+
+      /**
+       * Returns a reference to the focusable element. Overridden from
+       * PaperInputBehavior to correctly focus the native input.
+       */
+      get _focusableElement() {
+        return Polymer.Element ? this.inputElement._inputElement :
+                                 this.inputElement;
+      },
+
+      // Note: This event is only available in the 2.0 version of this element.
+      // In 1.0, the functionality of `_onIronInputReady` is done in
+      // PaperInputBehavior::attached.
+      listeners: {'iron-input-ready': '_onIronInputReady'},
+
+      _onIronInputReady: function() {
+        // Only validate when attached if the input already has a value.
+        if (!!this.inputElement.bindValue) {
+          this._handleAutoValidate();
+        }
+      },
+
+      /**
+       * A handler that is called when cardTypes changes
+       */
+      _onCardTypesChanged: function(cardTypes, oldValue) {
+        if (this.value)
+          this._handleAutoValidate();
+      },
+
+      /**
+       * A handler that is called on input
+       */
+      _onValueChanged: function(value, oldValue) {
+        if (oldValue == undefined)
+          return;
+
+        var start = this.$.input.selectionStart;
+        var previousCharASpace =
+            value ? this.value.charAt(start - 1) == ' ' : false;
+
+        value = value.replace(/\s+/g, '');
+        var formattedValue = '';
+        for (var i = 0; i < value.length; i++) {
+          // Add a space after every 4 characters.
+          if ((i != 0) && (i % 4 == 0)) {
+            formattedValue += ' ';
+          }
+          formattedValue += value[i];
+        }
+        this.updateValueAndPreserveCaret(formattedValue.trim());
+
+        // If the character right before the selection is a newly inserted
+        // space, we need to advance the selection to maintain the caret position.
+        if (!previousCharASpace && this.value.charAt(start - 1) == ' ') {
+          this.$.input.selectionStart = start + 1;
+          this.$.input.selectionEnd = start + 1;
+        }
+
+        this._handleAutoValidate();
+      },
+
+      /**
+       * Returns true if the element has a valid value, and sets the visual
+       * error state.
+       *
+       * @return {boolean} Whether the input is currently valid or not.
+       */
+      validate: function() {
+        // Empty, non-required input is valid.
+        if (!this.required && this.value == '') {
+          return true;
+        }
+
+        var result = CreditCardValidator.validate(this.value);
+        var valid = result.valid && result.length_valid;
+        if (valid && this.cardTypes && this.cardTypes.length > 0) {
+          valid = this.cardTypes.indexOf(result.card_type.name) !== -1;
+        }
+        this.cardType = valid ? result.card_type.name : '';
+
+        // Update the container and its addons (i.e. the custom error-message).
+        this.$.container.invalid = !valid;
+
+        this.$.container.updateAddons(
+            {inputElement: this.$.input, value: this.value, invalid: !valid});
+
+        // We don't have icons for all the card types.
+        if (valid && result.card_type.icon) {
+          this.$.icon.src = this.resolveUrl(result.card_type.icon);
+          this.$.icon.alt = this.cardType;
+          this.$.icon.hidden = false;
+        } else {
+          this.$.icon.src = null;
+          this.$.icon.alt = '';
+          this.$.icon.hidden = true;
+        }
+
+        return valid;
+      },
+
+      /**
+       * Overidden from Polymer.IronControlState.
+       */
+      _onFocusedChanged: function(focused) {
+        if (!this._focusableElement) {
+          return;
+        }
+        if (!focused) {
+          this._handleAutoValidate();
+        }
+      }
+    })
     })();
-
   </script>
 
 </dom-module>

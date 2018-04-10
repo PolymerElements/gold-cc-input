@@ -64,9 +64,9 @@ interface GoldCcInputElement extends Polymer.Element, Polymer.PaperInputBehavior
   value: string|null|undefined;
 
   /**
-   * Returns a reference to the focusable element. Overridden from PaperInputBehavior
-   * to correctly focus the native input.
-   *         
+   * Returns a reference to the focusable element. Overridden from
+   * PaperInputBehavior to correctly focus the native input.
+   *        
    */
   readonly _focusableElement: any;
 

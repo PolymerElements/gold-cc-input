@@ -48,36 +48,39 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </test-fixture>
 
   <script>
-
     function getIronInput(paperInput) {
       return paperInput.inputElement;
     }
     function getNativeInput(paperInput) {
-       return Polymer.Element ?
-          paperInput.inputElement.inputElement : paperInput.inputElement;
+      return Polymer.Element ? paperInput.inputElement.inputElement :
+                               paperInput.inputElement;
     }
 
     suite('basic', function() {
       test('input is spaced out correctly', function() {
         var input = fixture('basic');
-        input.value='12345678';
+        input.value = '12345678';
         assert.equal(input.value, '1234 5678');
       });
 
       test('invalid input is not ok', function(done) {
         var input = fixture('required');
         Polymer.Base.async(function() {
-          input.value='1234';
+          input.value = '1234';
           forceXIfStamp(input);
 
-          var container = Polymer.dom(input.root).querySelector('paper-input-container');
+          var container =
+              Polymer.dom(input.root).querySelector('paper-input-container');
           assert.ok(container, 'paper-input-container exists');
           assert.isTrue(container.invalid);
           assert.equal(input.cardType, '');
 
           var error = Polymer.dom(input.root).querySelector('paper-input-error');
           assert.ok(error, 'paper-input-error exists');
-          assert.notEqual(getComputedStyle(error).visibility, 'hidden', 'error is not visibility:hidden');
+          assert.notEqual(
+              getComputedStyle(error).visibility,
+              'hidden',
+              'error is not visibility:hidden');
           done();
         }, 1);
       });
@@ -85,10 +88,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       test('valid input is ok', function(done) {
         var input = fixture('required');
         Polymer.Base.async(function() {
-          input.value='4000000000000002';
+          input.value = '4000000000000002';
           forceXIfStamp(input);
 
-          var container = Polymer.dom(input.root).querySelector('paper-input-container');
+          var container =
+              Polymer.dom(input.root).querySelector('paper-input-container');
           assert.ok(container, 'paper-input-container exists');
           assert.isFalse(container.invalid);
           assert.equal(input.cardType, 'visa');
@@ -99,18 +103,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       test('invalid card-type is not ok', function(done) {
         var input = fixture('required');
         Polymer.Base.async(function() {
-          input.value='4000000000000002';
-          input.cardTypes = [ 'mastercard' ];
+          input.value = '4000000000000002';
+          input.cardTypes = ['mastercard'];
           forceXIfStamp(input);
 
-          var container = Polymer.dom(input.root).querySelector('paper-input-container');
+          var container =
+              Polymer.dom(input.root).querySelector('paper-input-container');
           assert.ok(container, 'paper-input-container exists');
           assert.isTrue(container.invalid);
           assert.equal(input.cardType, '');
 
           var error = Polymer.dom(input.root).querySelector('paper-input-error');
           assert.ok(error, 'paper-input-error exists');
-          assert.notEqual(getComputedStyle(error).visibility, 'hidden', 'error is not visibility:hidden');
+          assert.notEqual(
+              getComputedStyle(error).visibility,
+              'hidden',
+              'error is not visibility:hidden');
           done();
         }, 1);
       });
@@ -118,11 +126,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       test('valid card-type is ok', function(done) {
         var input = fixture('required');
         Polymer.Base.async(function() {
-          input.value='4000000000000002';
-          input.cardTypes = [ 'visa' ];
+          input.value = '4000000000000002';
+          input.cardTypes = ['visa'];
           forceXIfStamp(input);
 
-          var container = Polymer.dom(input.root).querySelector('paper-input-container');
+          var container =
+              Polymer.dom(input.root).querySelector('paper-input-container');
           assert.ok(container, 'paper-input-container exists');
           assert.isFalse(container.invalid);
           assert.equal(input.cardType, 'visa');
@@ -135,36 +144,52 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         Polymer.Base.async(function() {
           forceXIfStamp(input);
 
-          var container = Polymer.dom(input.root).querySelector('paper-input-container');
+          var container =
+              Polymer.dom(input.root).querySelector('paper-input-container');
           var error = Polymer.dom(input.root).querySelector('paper-input-error');
           assert.ok(error, 'paper-input-error exists');
-          assert.equal(getComputedStyle(error).visibility, 'hidden', 'error is visibility:hidden');
+          assert.equal(
+              getComputedStyle(error).visibility,
+              'hidden',
+              'error is visibility:hidden');
           assert.isFalse(container.invalid);
 
           MockInteractions.focus(input);
           MockInteractions.blur(input);
 
           assert(!input.focused, 'input is blurred');
-          assert.notEqual(getComputedStyle(error).visibility, 'hidden', 'error is not visibility:hidden');
+          assert.notEqual(
+              getComputedStyle(error).visibility,
+              'hidden',
+              'error is not visibility:hidden');
           assert.isTrue(container.invalid);
           done();
         }, 1);
       });
 
-      test('invalid input shows error message after manual validation', function(done) {
-        var input = fixture('ErrorWithoutAutoValidate');
-        Polymer.Base.async(function() {
-          forceXIfStamp(input);
-          var error = Polymer.dom(input.root).querySelector('paper-input-error');
-          assert.ok(error, 'paper-input-error exists');
+      test(
+          'invalid input shows error message after manual validation',
+          function(done) {
+            var input = fixture('ErrorWithoutAutoValidate');
+            Polymer.Base.async(function() {
+              forceXIfStamp(input);
+              var error =
+                  Polymer.dom(input.root).querySelector('paper-input-error');
+              assert.ok(error, 'paper-input-error exists');
 
-          // The error message is only displayed after manual validation.
-          assert.equal(getComputedStyle(error).visibility, 'hidden', 'error is visibility:hidden');
-          input.validate();
-          assert.notEqual(getComputedStyle(error).visibility, 'hidden', 'error is not visibility:hidden');
-          done();
-        }, 1);
-      });
+              // The error message is only displayed after manual validation.
+              assert.equal(
+                  getComputedStyle(error).visibility,
+                  'hidden',
+                  'error is visibility:hidden');
+              input.validate();
+              assert.notEqual(
+                  getComputedStyle(error).visibility,
+                  'hidden',
+                  'error is not visibility:hidden');
+              done();
+            }, 1);
+          });
 
       test('caret position is preserved', function(done) {
         var input = fixture('required');
@@ -184,28 +209,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     });
 
     suite('a11y', function() {
-
       test('has aria-labelledby', function(done) {
         var input = fixture('basic');
         Polymer.Base.async(function() {
           var nativeInput = getNativeInput(input);
           assert.isTrue(nativeInput.hasAttribute('aria-labelledby'))
-          assert.equal(nativeInput.getAttribute('aria-labelledby'), Polymer.dom(input.root).querySelector('label').id, 'aria-labelledby points to the label');
+          assert.equal(
+              nativeInput.getAttribute('aria-labelledby'),
+              Polymer.dom(input.root).querySelector('label').id,
+              'aria-labelledby points to the label');
           done();
         }, 1);
       });
 
-       test('required and error has aria-labelledby', function(done) {
+      test('required and error has aria-labelledby', function(done) {
         var input = fixture('required');
         Polymer.Base.async(function() {
           var nativeInput = getNativeInput(input);
           assert.isTrue(nativeInput.hasAttribute('aria-labelledby'))
-          assert.equal(nativeInput.getAttribute('aria-labelledby'), Polymer.dom(input.root).querySelector('label').id, 'aria-labelledby points to the label');
+          assert.equal(
+              nativeInput.getAttribute('aria-labelledby'),
+              Polymer.dom(input.root).querySelector('label').id,
+              'aria-labelledby points to the label');
           done();
         }, 1);
       });
     });
-
   </script>
 
 </body>
