@@ -1,11 +1,12 @@
 /**
 @license
 Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+This code may only be used under the BSD style license found at
+http://polymer.github.io/LICENSE.txt The complete set of authors may be found at
+http://polymer.github.io/AUTHORS.txt The complete set of contributors may be
+found at http://polymer.github.io/CONTRIBUTORS.txt Code distributed by Google as
+part of the polymer project is also subject to an additional IP rights grant
+found at http://polymer.github.io/PATENTS.txt
 */
 /*
 jQuery Credit Card Validator 1.0
@@ -32,56 +33,73 @@ IN THE SOFTWARE.
 var CreditCardValidator = (function(global) {
   'use strict';
 
-  function validateCreditCard (input) {
-    var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
-    var bind, card, card_type, card_types, get_card_type, is_valid_length, is_valid_luhn, normalize, validate, validate_number, _i, _len, _ref;
+  function validateCreditCard(input) {
+    var __indexOf = [].indexOf || function(item) {
+      for (var i = 0, l = this.length; i < l; i++) {
+        if (i in this && this[i] === item)
+          return i;
+      }
+      return -1;
+    };
+    var bind, card, card_type, card_types, get_card_type, is_valid_length,
+        is_valid_luhn, normalize, validate, validate_number, _i, _len, _ref;
     card_types = [
       {
         name: 'amex',
         icon: 'images/amex.png',
         pattern: /^3[47]/,
         valid_length: [15]
-      }, {
+      },
+      {
         name: 'diners_club',
         icon: 'images/diners_club.png',
         pattern: /^30[0-5]/,
         valid_length: [14]
-      }, {
+      },
+      {
         name: 'diners_club',
         icon: 'images/diners_club.png',
         pattern: /^36/,
         valid_length: [14]
-      }, {
+      },
+      {
         name: 'jcb',
         icon: 'images/jcb.png',
         pattern: /^35(2[89]|[3-8][0-9])/,
         valid_length: [16]
-      }, {
+      },
+      {
         name: 'laser',
         pattern: /^(6304|670[69]|6771)/,
         valid_length: [16, 17, 18, 19]
-      }, {
+      },
+      {
         name: 'visa_electron',
         pattern: /^(4026|417500|4508|4844|491(3|7))/,
         valid_length: [16]
-      }, {
+      },
+      {
         name: 'visa',
         icon: 'images/visa.png',
         pattern: /^4/,
         valid_length: [16]
-      }, {
+      },
+      {
         name: 'mastercard',
         icon: 'images/mastercard.png',
         pattern: /^5[1-5]/,
         valid_length: [16]
-      }, {
+      },
+      {
         name: 'maestro',
         pattern: /^(5018|5020|5038|6304|6759|676[1-3])/,
         valid_length: [12, 13, 14, 15, 16, 17, 18, 19]
-      }, {
+      },
+      {
         name: 'discover',
         icon: 'images/discover.png',
-        pattern: /^(6011|622(12[6-9]|1[3-9][0-9]|[2-8][0-9]{2}|9[0-1][0-9]|92[0-5]|64[4-9])|65)/,
+        pattern:
+            /^(6011|622(12[6-9]|1[3-9][0-9]|[2-8][0-9]{2}|9[0-1][0-9]|92[0-5]|64[4-9])|65)/,
         valid_length: [16]
       }
     ];
@@ -102,16 +120,18 @@ var CreditCardValidator = (function(global) {
     _ref = options.accept;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       card_type = _ref[_i];
-      if (__indexOf.call((function() {
-        var _j, _len1, _results;
-        _results = [];
-        for (_j = 0, _len1 = card_types.length; _j < _len1; _j++) {
-          card = card_types[_j];
-          _results.push(card.name);
-        }
-        return _results;
-      })(), card_type) < 0) {
-        throw "Credit card type '" + card_type + "' is not supported";
+      if (__indexOf.call(
+              (function() {
+                var _j, _len1, _results;
+                _results = [];
+                for (_j = 0, _len1 = card_types.length; _j < _len1; _j++) {
+                  card = card_types[_j];
+                  _results.push(card.name);
+                }
+                return _results;
+              })(),
+              card_type) < 0) {
+        throw 'Credit card type \'' + card_type + '\' is not supported';
       }
     }
 
@@ -160,7 +180,8 @@ var CreditCardValidator = (function(global) {
 
     is_valid_length = function(number, card_type) {
       var _ref1;
-      return _ref1 = number.length, __indexOf.call(card_type.valid_length, _ref1) >= 0;
+      return _ref1 = number.length,
+             __indexOf.call(card_type.valid_length, _ref1) >= 0;
     };
 
     validate_number = (function(_this) {
@@ -195,7 +216,5 @@ var CreditCardValidator = (function(global) {
     return validate(input);
   };
 
-  return {
-    validate: validateCreditCard
-  };
- })(this);
+  return {validate: validateCreditCard};
+})(this);
