@@ -17,9 +17,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <title>gold-cc-input demo</title>
 
-  <script src="../../../@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
-  <script type="module" src="../gold-cc-input.js"></script>
-  <script type="module" src="../../paper-styles/demo-pages.js"></script>
+  <script src="https://unpkg.com/@webcomponents/webcomponentsjs@^2.0.0/webcomponents-loader.js"></script>
+  <script type="module">
+    import '@polymer/paper-styles/demo-pages.js';
+    import '../gold-cc-input.js';
+  </script>
 
 </head>
 <body unresolved>
@@ -32,15 +34,36 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <h4>Pre-validated</h4>
     <div class="vertical-section">
-      <gold-cc-input label="Visa" value="4000 0000 0000 0002" auto-validate></gold-cc-input>
-      <gold-cc-input label= "MasterCard" value="5100 0000 0000 0008" auto-validate></gold-cc-input>
-      <gold-cc-input label="Discover" value="6011 0000 0000 0004" auto-validate></gold-cc-input>
-      <gold-cc-input label="Invalid Discover Card" value="6011 0000 0000 1233" auto-validate></gold-cc-input>
+      <gold-cc-input
+          label="Visa"
+          value="4000 0000 0000 0002"
+          auto-validate>
+      </gold-cc-input>
+      <gold-cc-input
+          label= "MasterCard"
+          value="5100 0000 0000 0008"
+          auto-validate>
+      </gold-cc-input>
+      <gold-cc-input
+          label="Discover"
+          value="6011 0000 0000 0004"
+          auto-validate>
+      </gold-cc-input>
+      <gold-cc-input
+          label="Invalid Discover Card"
+          value="6011 0000 0000 1233"
+          auto-validate>
+      </gold-cc-input>
     </div>
 
     <h4>Custom error message, auto-validates on blur</h4>
     <div class="vertical-section">
-      <gold-cc-input auto-validate label="Cats only" error-message="needs more cats" required></gold-cc-input>
+      <gold-cc-input
+          auto-validate
+          label="Credit card numbers only"
+          error-message="needs more cc numbers!"
+          required>
+      </gold-cc-input>
     </div>
 
     <h4>Allowable card-types, auto-validates</h4>
