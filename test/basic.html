@@ -68,7 +68,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         var input = fixture('required');
         Base.async(function() {
           input.value = '1234';
-          forceXIfStamp(input);
 
           var container = dom(input.root).querySelector('paper-input-container');
           assert.ok(container, 'paper-input-container exists');
@@ -89,7 +88,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         var input = fixture('required');
         Base.async(function() {
           input.value = '4000000000000002';
-          forceXIfStamp(input);
 
           var container = dom(input.root).querySelector('paper-input-container');
           assert.ok(container, 'paper-input-container exists');
@@ -104,7 +102,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         Base.async(function() {
           input.value = '4000000000000002';
           input.cardTypes = ['mastercard'];
-          forceXIfStamp(input);
 
           var container = dom(input.root).querySelector('paper-input-container');
           assert.ok(container, 'paper-input-container exists');
@@ -126,7 +123,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         Base.async(function() {
           input.value = '4000000000000002';
           input.cardTypes = ['visa'];
-          forceXIfStamp(input);
 
           var container = dom(input.root).querySelector('paper-input-container');
           assert.ok(container, 'paper-input-container exists');
@@ -139,7 +135,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       test('empty required input shows error on blur', function(done) {
         var input = fixture('required');
         Base.async(function() {
-          forceXIfStamp(input);
 
           var container = dom(input.root).querySelector('paper-input-container');
           var error = dom(input.root).querySelector('paper-input-error');
@@ -168,7 +163,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           function(done) {
             var input = fixture('ErrorWithoutAutoValidate');
             Base.async(function() {
-              forceXIfStamp(input);
               var error = dom(input.root).querySelector('paper-input-error');
               assert.ok(error, 'paper-input-error exists');
 
