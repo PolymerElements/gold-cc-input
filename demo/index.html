@@ -68,15 +68,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <h4>Allowable card-types, auto-validates</h4>
     <div class="vertical-section">
-      <gold-cc-input auto-validate label="Card number"
+      <gold-cc-input
+          auto-validate
+          label="Card number"
           error-message="Enter valid visa or mastercard!"
-          card-types='["visa", "mastercard"]' required>
+          card-types='["visa", "mastercard"]'
+          required>
       </gold-cc-input>
       <gold-cc-input
-          auto-validate label="Card number"
+          auto-validate
+          label="Card number"
           error-message="Invalid Discover Card!"
           card-types='["discover"]'
-          value="6011 0000 0000 1233" required>
+          value="6011 0000 0000 1233"
+          required>
       </gold-cc-input>
     <div>
   </div>
