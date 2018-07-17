@@ -1,19 +1,7 @@
-
-<!---
-
-This README is automatically generated from the comments in these files:
-gold-cc-input.html
-
-Edit those files, and our readme bot will duplicate them over here!
-Edit this file, and the bot will squash your changes :)
-
-The bot does some handling of markdown. Please file a bug if it does the wrong
-thing! https://github.com/PolymerLabs/tedium/issues
-
--->
-
+[![Published on NPM](https://img.shields.io/npm/v/@polymer/gold-cc-input.svg)](https://www.npmjs.com/package/@polymer/gold-cc-input)
 [![Build status](https://travis-ci.org/PolymerElements/gold-cc-input.svg?branch=master)](https://travis-ci.org/PolymerElements/gold-cc-input)
-[![Demo and API Docs](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/PolymerElements/gold-cc-input)
+[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://webcomponents.org/element/@polymer/gold-cc-input)
+
 
 ## &lt;gold-cc-input&gt;
 
@@ -21,40 +9,77 @@ thing! https://github.com/PolymerLabs/tedium/issues
 for entering a credit card number. As the user types, the number will be
 formatted by adding a space every 4 digits.
 
-```html
-<gold-cc-input></gold-cc-input>
+See: [Documentation](https://www.webcomponents.org/element/@polymer/gold-cc-input),
+  [Demo](https://www.webcomponents.org/element/@polymer/gold-cc-input/demo/demo/index.html).
+
+## Usage
+
+### Installation
+```
+npm install --save @polymer/gold-cc-input
 ```
 
-It may include an optional label, which by default is "Card number".
-
+### In an html file
 ```html
-<gold-cc-input label="CC"></gold-cc-input>
+<html>
+  <head>
+    <script type="module">
+      import '@polymer/gold-cc-input/gold-cc-input.js';
+    </script>
+  </head>
+  <body>
+    <gold-cc-input
+          auto-validate
+          label="Card number"
+          error-message="Enter valid visa or mastercard!"
+          card-types='["visa", "mastercard"]'
+          value="6011 0000 0000 1233"
+          required>
+    </gold-cc-input>
+  </body>
+</html>
+```
+### In a Polymer 3 element
+```js
+import {PolymerElement, html} from '@polymer/polymer';
+import '@polymer/gold-cc-input/gold-cc-input.js';
+
+class SampleElement extends PolymerElement {
+  static get template() {
+    return html`
+      <gold-cc-input
+          auto-validate
+          label="Card number"
+          error-message="Enter valid visa or mastercard!"
+          card-types='["visa", "mastercard"]'
+          value="6011 0000 0000 1233"
+          required>
+      </gold-cc-input>
+    `;
+  }
+}
+customElements.define('sample-element', SampleElement);
 ```
 
-### Validation
+## Contributing
+If you want to send a PR to this element, here are
+the instructions for running the tests and demo locally:
 
-The input can detect whether a credit card number is valid, and the type
-of credit card it is, using the Luhn checksum. See `http://jquerycreditcardvalidator.com/`
-for more information.
+### Installation
+```sh
+git clone https://github.com/PolymerElements/gold-cc-input
+cd gold-cc-input
+npm install
+npm install -g polymer-cli
+```
 
-The input can be automatically validated as the user is typing by using
-the `auto-validate` and `required` attributes. For manual validation, the
-element also has a `validate()` method, which returns the validity of the
-input as well sets any appropriate error messages and styles.
+### Running the demo locally
+```sh
+polymer serve --npm
+open http://127.0.0.1:<port>/demo/
+```
 
-A list of allowable credit card types can be provided via the `cardTypes`
-property. Possible options, from `cc-validator.js`, are: `amex`, `diners_club`,
-`discover`, `jcb`, `laser`, `maestro`, `mastercard`, `visa`, `visa_electron`.
-
-See `Polymer.PaperInputBehavior` for more API docs.
-
-### Styling
-
-See `Polymer.PaperInputContainer` for a list of custom properties used to
-style this element.
-
-| Custom property | Description | Default  |
-| --- | --- | --- |
-| `----gold-cc-input-icon-container` | Mixin applied to the icon container | `{}` |
-
-
+### Running the tests
+```sh
+polymer test --npm
+```
