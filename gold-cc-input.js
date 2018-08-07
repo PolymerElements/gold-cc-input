@@ -103,7 +103,7 @@ Polymer({
             invalid$="{{invalid}}"
             required$="[[required]]"
             type="tel"
-            prevent-invalid-input=""
+            prevent-invalid-input
             autocomplete="cc-number"
             name$="[[name]]"
             disabled$="[[disabled]]"
