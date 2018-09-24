@@ -89,6 +89,12 @@ card_types = [
     pattern:
         /^(6011|622(12[6-9]|1[3-9][0-9]|[2-8][0-9]{2}|9[0-1][0-9]|92[0-5]|64[4-9])|65)/,
     valid_length: [16]
+  },
+  {
+    name: 'union_pay',
+    icon: 'images/union_pay.png',
+    pattern: /^(62[0-9]{11,19})/,
+    valid_length: [13, 14, 15, 16, 17, 18, 19]
   }
 ];
 
@@ -178,7 +184,7 @@ function validate_number(number) {
   luhn_valid = false;
   length_valid = false;
   if (card_type != null) {
-    luhn_valid = is_valid_luhn(number);
+    luhn_valid = (card_type.name === 'union_pay' ? true : is_valid_luhn(number));
     length_valid = is_valid_length(number, card_type);
   }
   return {

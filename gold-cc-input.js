@@ -149,6 +149,11 @@ Polymer({
     cardTypes: {type: Array, observer: '_onCardTypesChanged'},
 
     value: {type: String, observer: '_onValueChanged'},
+
+    /**
+     * Toggle card icons
+     */
+    hideIcons: {type: Boolean, value: false},
   },
 
   observers: ['_onFocusedChanged(focused)'],
@@ -245,7 +250,7 @@ Polymer({
         {inputElement: this.$.input, value: this.value, invalid: !valid});
 
     // We don't have icons for all the card types.
-    if (valid && result.card_type.icon) {
+    if (valid && result.card_type.icon && !this.hideIcons) {
       this.$.icon.src = this.resolveUrl(result.card_type.icon);
       this.$.icon.alt = this.cardType;
       this.$.icon.hidden = false;
